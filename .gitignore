@@ -1,0 +1,23 @@
+# Build output
+/target
+**/target
+
+# Cargo metadata (libraries generally don't ship lockfiles)
+Cargo.lock
+
+# Backup & generated sources
+**/*.rs.bk
+**/*.orig
+
+# Editor local state
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
