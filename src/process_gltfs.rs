@@ -1,16 +1,16 @@
 use bevy::{
-    core::Name,
     ecs::{
         entity::Entity,
+        hierarchy::ChildOf,
+        name::Name,
         query::{Added, Without},
         reflect::{AppTypeRegistry, ReflectComponent},
         world::World,
     },
     gltf::GltfExtras,
-    hierarchy::Parent,
     log::debug,
+    platform::collections::HashMap,
     reflect::{PartialReflect, TypeRegistration},
-    utils::HashMap,
 };
 
 use crate::{ronstring_to_reflect_component, GltfComponentsConfig, GltfProcessed};
@@ -18,7 +18,7 @@ use crate::{ronstring_to_reflect_component, GltfComponentsConfig, GltfProcessed}
 /// main function: injects components into each entity in gltf files that have `gltf_extras`, using reflection
 pub fn add_components_from_gltf_extras(world: &mut World) {
     let mut extras =
-        world.query_filtered::<(Entity, &Name, &GltfExtras, &Parent), (Added<GltfExtras>, Without<GltfProcessed>)>();
+        world.query_filtered::<(Entity, &Name, &GltfExtras, &ChildOf), (Added<GltfExtras>, Without<GltfProcessed>)>();
     let mut entity_components: HashMap<Entity, Vec<(Box<dyn PartialReflect>, TypeRegistration)>> =
         HashMap::new();
 
@@ -45,7 +45,7 @@ pub fn add_components_from_gltf_extras(world: &mut World) {
         // this is mostly used for Blender collections
         if name.as_str().contains("components") || name.as_str().ends_with("_pa") {
             debug!("adding components to parent");
-            target_entity = parent.get();
+            target_entity = parent.parent();
         }
         debug!("adding to {:?}", target_entity);
 
@@ -57,11 +57,11 @@ pub fn add_components_from_gltf_extras(world: &mut World) {
             let current_components = &entity_components[&target_entity];
             // first inject the current components
             for (component, type_registration) in current_components {
-                updated_components.push((component.clone_value(), type_registration.clone()));
+                updated_components.push((component.to_dynamic(), type_registration.clone()));
             }
             // then inject the new components: this also enables overwrite components set in the collection
             for (component, type_registration) in reflect_components {
-                updated_components.push((component.clone_value(), type_registration));
+                updated_components.push((component.to_dynamic(), type_registration));
             }
             entity_components.insert(target_entity, updated_components);
         } else {

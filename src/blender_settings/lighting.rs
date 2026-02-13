@@ -1,13 +1,10 @@
-use bevy::pbr::DirectionalLightShadowMap;
+use bevy::light::DirectionalLightShadowMap;
 use bevy::prelude::*;
 
 use crate::GltfComponentsSet;
 
 pub(crate) fn plugin(app: &mut App) {
-    app.register_type::<BlenderBackgroundShader>()
-        .register_type::<BlenderShadowSettings>()
-        .register_type::<BlenderLightShadows>()
-        .add_systems(
+    app.add_systems(
             Update,
             (process_lights, process_shadowmap, process_background_shader)
                 .after(GltfComponentsSet::Injection),
@@ -92,6 +89,7 @@ fn process_background_shader(
             color: background_shader.color,
             // Just a guess, see <https://github.com/bevyengine/bevy/issues/12280>
             brightness: background_shader.strength * 400.0,
+            affects_lightmapped_meshes: true,
         });
     }
 }

@@ -10,7 +10,7 @@
 # See Cargo.toml.orig for the original contents.
 
 [package]
-edition = "2021"
+edition = "2024"
 name = "bevy_gltf_components"
 version = "0.6.0"
 authors = ["Mark 'kaosat-dev' Moissette"]
@@ -29,22 +29,23 @@ license = "MIT OR Apache-2.0"
 repository = "https://github.com/kaosat-dev/Blender_bevy_components_workflow"
 
 [dependencies.bevy]
-version = "0.15"
+version = "0.17.3"
 features = [
     "bevy_asset",
     "bevy_scene",
     "bevy_gltf",
+    "bevy_log",
 ]
 default-features = false
 
 [dependencies.ron]
-version = "0.8.1"
+version = "0.9"
 
 [dependencies.serde]
 version = "1.0.188"
 
 [dev-dependencies.bevy]
-version = "0.15"
+version = "0.17.3"
 features = ["dynamic_linking"]
 default-features = false
 

@@ -25,36 +25,20 @@ Here's a minimal usage example:
 ```toml
 # Cargo.toml
 [dependencies]
-bevy="0.14"
-bevy_gltf_components = { version = "0.6"} 
-
+bevy = "0.17"
+bevy_gltf_components = { version = "0.6" }
 ```
 
 ```rust no_run
-//too barebones of an example to be meaningfull, please see https://github.com/kaosat-dev/Blender_bevy_components_workflow/bevy_gltf_components/examples/basic for a real example
- fn main() {
+use bevy::prelude::*;
+use bevy_gltf_components::ComponentsFromGltfPlugin;
+
+fn main() {
     App::new()
-         .add_plugins(DefaultPlugins)
-         .add_plugin(ComponentsFromGltfPlugin::default())
-         .add_system(spawn_level)
-         .run();
- }
- 
- fn spawn_level(
-   asset_server: Res<AssetServer>, 
-   mut commands: bevy::prelude::Commands,
-   keycode: Res<Input<KeyCode>>,
-
- ){
- if keycode.just_pressed(KeyCode::Return) {
-  commands.spawn(SceneBundle {
-   scene: asset_server.load("basic/models/level1.glb#Scene0"),
-   transform: Transform::from_xyz(2.0, 0.0, -5.0),
- ..Default::default()
- });
- }
+        .add_plugins(DefaultPlugins)
+        .add_plugins(ComponentsFromGltfPlugin::default())
+        .run();
 }
-
 ```
 
 ##  Installation
@@ -129,12 +113,11 @@ The main branch is compatible with the latest Bevy release, while the branch `be
 Compatibility of `bevy_gltf_components` versions:
 | `bevy_gltf_components` | `bevy` |
 | :--                 | :--    |
+| `0.6` (master)      | `0.17` |
 | `0.6`               | `0.14` |
 | `0.5`               | `0.13` |
 | `0.2 - 0.4`         | `0.12` |
 | `0.1`               | `0.11` |
-| branch `main`       | `0.13` |
-| branch `bevy_main`  | `main` |
 
 
 ## License
